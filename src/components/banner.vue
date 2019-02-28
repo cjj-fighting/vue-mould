@@ -3,13 +3,39 @@
 		<img src="../../build/xiyang.png" alt="">
 		<div class="cover" v-show="isShow">
 			<span @click="delSelf(index)">删除</span>
-			<!-- <span>编辑</span> -->
+			<span>编辑</span>
 			<!-- <span v-show="index !== 0" @click="moveUp(index)">上移</span>
 			<span v-show="index !== store.state.items.length - 1" @click="moveDown(index)">下移</span> -->
 			<span @click="moveUp(index)">上移</span>
 			<span @click="moveDown(index)">下移</span>
 		</div>
+		<div class="edit" v-show="isShowEdit">
+			<el-card class="box-card">
+				<div slot="header" class="clearfix">
+					<span>修改元素属性</span>
+					<!-- <el-button style="float: right; padding: 3px 0" type="text">操作按钮</el-button> -->
+				</div>
+				<div class="text item">
+					<el-form ref="form" :model="form" label-width="80px" label-position="left">
+						<el-form-item label="宽度">
+							<el-input v-model="form.width"></el-input>
+						</el-form-item>
+						<el-form-item label="高度">
+							<el-input v-model="form.width"></el-input>
+						</el-form-item>
+						<el-form-item label="图片地址">
+							<el-input v-model="form.width"></el-input>
+						</el-form-item>
+						<el-form-item>
+							<el-button type="primary">修改</el-button>
+							<el-button>取消</el-button>
+						</el-form-item>
+					</el-form>
+				</div>
+			</el-card>
 
+
+		</div>
 	</div>
 </template>
 
@@ -22,6 +48,10 @@
 		data() {
 			return {
 				isShow: false,
+				isShowEdit: true,
+				form: {
+					width: null
+				}
 			}
 		},
 		methods: {
@@ -52,7 +82,7 @@
 				})
 			},
 			moveUp(index) {
-				if(index === 0){
+				if (index === 0) {
 					this.$message.warning("已经是第一个了,不能再上移了")
 					return
 				}
@@ -66,7 +96,7 @@
 			},
 			moveDown(index) {
 				let length = store.state.items.length
-				if(index === length - 1){
+				if (index === length - 1) {
 					this.$message.warning("已经是最后一个了,不能再下移了")
 					return
 				}
@@ -79,12 +109,9 @@
 				store.commit('orderByItemArr', items)
 			}
 		},
-		computed: {
-		},
-		watch: {
-		},
-		mounted() {
-		}
+		computed: {},
+		watch: {},
+		mounted() {}
 	}
 </script>
 
@@ -112,5 +139,14 @@
 		color: #fff;
 		text-align: center;
 		cursor: pointer;
+	}
+
+	.edit {
+		width: 400px;
+		/* height: 600px; */
+		/* background-color: #e6e66e; */
+		position: fixed;
+		left: 620px;
+		top: 100px;
 	}
 </style>
