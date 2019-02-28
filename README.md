@@ -2,6 +2,11 @@
 
 > A Vue.js project
 
+### 引用的依赖
+
+> npm install element-ui vuedraggable vuex --save
+
+
 ## Build Setup
 
 ``` bash

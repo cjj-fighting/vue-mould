@@ -6,18 +6,29 @@
 			<li @click="addItem('shops')">shops</li>
 		</ul>
 
-		<!-- <div class="phone">
-			<component :is="item" v-for="(item, index) in items" :key="index"></component>
-		</div> -->
-
 		<div class="phone">
 			<draggable v-model="items" @update="datadragEnd" :options="{animation:500}">
 				<transition-group>
-					<component :is="item.comp" v-for="(item, index) in items" :index="index" :key="index"></component>
+					<component :is="item.comp" v-for="(item, index) in items" :class="index" :index="index" :key="index"></component>
 				</transition-group>
 			</draggable>
 		</div>
+		<div class="edit">
+			<div class="title">修改属性</div>
+			<el-form ref="form" :model="form" label-width="80px">
 
+				<el-form-item label="修改宽度">
+					<el-input v-model="form.width"></el-input>
+				</el-form-item>
+				<el-form-item label="修改高度">
+					<el-input v-model="form.height"></el-input>
+				</el-form-item>
+				<el-form-item>
+					<el-button type="primary">修改</el-button>
+					<el-button>取消</el-button>
+				</el-form-item>
+			</el-form>
+		</div>
 	</div>
 </template>
 
@@ -33,6 +44,11 @@
 		data() {
 			return {
 				items: [],
+				form: {
+					width: null,
+					height: null
+				},
+
 			}
 		},
 		components: {
@@ -48,20 +64,21 @@
 				// 				console.log('拖动后的索引 :' + evt.newIndex)
 				// console.log(this.items);
 				// 排序后重新提交
-				store.dispatch('orderByItem', this.items)
+				// store.dispatch('orderByItem', this.items)
+				store.commit('orderByItemArr', this.items)
 			},
 			addItem(item) {
 				// 				this.items = this.items.push({
 				// 					comp: item
 				// 				})
 				// 选择模块后将此模块提交
-				store.dispatch('setItems', {
+// 				store.dispatch('setItems', {
+// 					comp: item
+// 				})
+				// 也可以直接提交mutations
+				store.commit('setItemsObj', {
 					comp: item
 				})
-				// 也可以直接提交mutations
-				// 				store.commit('setItemsObj', {
-				// 					comp: item
-				// 				})
 			}
 		},
 		mounted() {
@@ -78,15 +95,27 @@
 			getItems() {
 				// 监听state变化
 				return store.state.items
-			}
+			},
+
 		},
 		watch: {
-			getItems: function(newVal, oldVal) {
-				// console.log(newVal)
-				// console.log(oldVal)
-				// 监听state变化,更改视图
-				this.items = newVal
-			}
+// 			getItems: function(newVal, oldVal) {
+// 				console.log(newVal)
+// 				console.log(oldVal)
+// 				// 监听state变化,更改视图
+// 				if (newVal !== oldVal) {
+// 					this.items = newVal
+// 				}
+// 			},
+
+			getItems: {
+				deep: true,
+				handler(newVal) {
+					// 由于是异步载入，所以只能在状态值的变化时执行渲染操作
+					// 绝不可在mounted中执行render方法
+					this.items = newVal
+				}
+			},
 		},
 	}
 </script>
@@ -110,34 +139,28 @@
 		height: 627px;
 		border: 1px solid #ccc;
 		border-radius: 15px;
-		margin: 20px 50px 0 200px;
+		margin: 20px 50px 0 100px;
 		padding: 20px 0;
 		float: left;
 		overflow-y: scroll;
 	}
 
-	/* .test{
-        border:1px solid #ccc;
-    }
-    .drag-item{
-        width: 200px;
-        height: 50px;
-        line-height: 50px;
-        margin: auto;
-        position: relative;
-        background: #ddd;
-        margin-top:20px;
-    }
-    .ghostClass{
-        opacity: 1;
-    }
-    .bottom{
-        width: 200px;
-        height: 50px;
-        position: relative;
-        background: blue;
-        top:2px;
-        left: 2px;
-        transition: all .5s linear;
-    } */
+
+	.edit {
+		background-color: #e6e6e6;
+		width: 400px;
+		height: auto;
+		float: left;
+		padding-right: 10px;
+		padding-top: 10px;
+		margin-top: 20px;
+		display: none;
+	}
+
+	.title {
+		line-height: 40px;
+		text-align: center;
+		margin-bottom: 15px;
+
+	}
 </style>

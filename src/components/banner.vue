@@ -3,8 +3,13 @@
 		<img src="../../build/xiyang.png" alt="">
 		<div class="cover" v-show="isShow">
 			<span @click="delSelf(index)">删除</span>
-			<span>编辑</span>
+			<!-- <span>编辑</span> -->
+			<!-- <span v-show="index !== 0" @click="moveUp(index)">上移</span>
+			<span v-show="index !== store.state.items.length - 1" @click="moveDown(index)">下移</span> -->
+			<span @click="moveUp(index)">上移</span>
+			<span @click="moveDown(index)">下移</span>
 		</div>
+
 	</div>
 </template>
 
@@ -16,7 +21,7 @@
 		],
 		data() {
 			return {
-				isShow: false
+				isShow: false,
 			}
 		},
 		methods: {
@@ -33,7 +38,8 @@
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(() => {
-					store.dispatch('delItem', index)
+					// store.dispatch('delItem', index)
+					store.commit('delItemIndex', index)
 					this.$message({
 						type: 'success',
 						message: '删除成功!'
@@ -44,8 +50,40 @@
 						message: '已取消删除'
 					})
 				})
-				// console.log(store.state.items)
+			},
+			moveUp(index) {
+				if(index === 0){
+					this.$message.warning("已经是第一个了,不能再上移了")
+					return
+				}
+				let items = store.state.items
+				let tempA = items[index].comp
+				let tempB = items[index - 1].comp
+				items[index - 1].comp = tempA
+				items[index].comp = tempB
+				// store.dispatch('orderByItem', items)
+				store.commit('orderByItemArr', items)
+			},
+			moveDown(index) {
+				let length = store.state.items.length
+				if(index === length - 1){
+					this.$message.warning("已经是最后一个了,不能再下移了")
+					return
+				}
+				let items = store.state.items
+				let tempA = items[index].comp
+				let tempB = items[index + 1].comp
+				items[index + 1].comp = tempA
+				items[index].comp = tempB
+				// store.dispatch('orderByItem', items)
+				store.commit('orderByItemArr', items)
 			}
+		},
+		computed: {
+		},
+		watch: {
+		},
+		mounted() {
 		}
 	}
 </script>
@@ -70,7 +108,7 @@
 		width: 100%;
 		height: 100%;
 		background-color: rgba(0, 0, 0, 0.5);
-		z-index: 2018;
+		z-index: 1000;
 		color: #fff;
 		text-align: center;
 		cursor: pointer;

@@ -7,7 +7,7 @@ let store = new vuex.Store({
 	state: {
 		items: []
 	},
-	// 	getters: { //这里可以不用
+	// 	getters: { // 获取state里的值
 	// 		getItems(state) {
 	// 			return state.items
 	// 		}
@@ -28,7 +28,7 @@ let store = new vuex.Store({
 		}
 	},
 	/**
-	 * actions用于提交mutations,这里面可以一步调用
+	 * actions用于提交mutations,这里面可以异步调用
 	 */
 	actions: {
 		// 添加item
