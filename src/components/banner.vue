@@ -1,5 +1,5 @@
 <template>
-	<div class="banner" @mouseenter="showCover" @mouseleave="hideCover">
+	<div class="banner" @mouseenter="showCover" @mouseleave="hideCover" :style="bannerStyle">
 		<img src="../../build/xiyang.png" alt="">
 		<div class="cover" v-show="isShow">
 			<span @click="delSelf(index)">删除</span>
@@ -21,13 +21,13 @@
 							<el-input v-model="form.width"></el-input>
 						</el-form-item>
 						<el-form-item label="高度">
-							<el-input v-model="form.width"></el-input>
+							<el-input v-model="form.height"></el-input>
 						</el-form-item>
-						<el-form-item label="图片地址">
+						<!-- <el-form-item label="图片地址">
 							<el-input v-model="form.width"></el-input>
-						</el-form-item>
+						</el-form-item> -->
 						<el-form-item>
-							<el-button type="primary">修改</el-button>
+							<el-button type="primary" @click="edit">修改</el-button>
 							<el-button>取消</el-button>
 						</el-form-item>
 					</el-form>
@@ -50,7 +50,11 @@
 				isShow: false,
 				isShowEdit: true,
 				form: {
-					width: null
+					width: null,
+					height: null
+				},
+				bannerStyle: {
+					width: ''
 				}
 			}
 		},
@@ -107,6 +111,9 @@
 				items[index].comp = tempB
 				// store.dispatch('orderByItem', items)
 				store.commit('orderByItemArr', items)
+			},
+			edit(){
+				
 			}
 		},
 		computed: {},
